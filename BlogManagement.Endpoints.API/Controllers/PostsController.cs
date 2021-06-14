@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BlogManagement.Core.ApplicationServices.Posts;
 using BlogManagement.Core.Domain.Posts;
+using System.Threading.Tasks;
 
 namespace PostManagement.Endpoints.API.Controllers
 {
@@ -27,7 +28,7 @@ namespace PostManagement.Endpoints.API.Controllers
         }
         
         [HttpGet("{id}")]
-        public PostCommentModel Get(int id)
+        public Task<PostCommentModel> Get(int id)
         {
             return _postApplicaitonService.Get(id);
         }

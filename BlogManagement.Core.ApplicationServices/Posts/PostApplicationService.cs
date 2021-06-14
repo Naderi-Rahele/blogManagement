@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using BlogManagement.Core.Domain.Posts;
 using BlogManagement.Core.Domain.Visits;
 
@@ -21,9 +22,9 @@ namespace BlogManagement.Core.ApplicationServices.Posts
             _postRepository.Add(post.ToPost());
         }
 
-        public PostCommentModel Get(int postId)
+        public async Task< PostCommentModel> Get(int postId)
         {
-            _visitRepository.Add(new Visit { PostId = postId, CreatedOn = DateTime.Now });
+           await _visitRepository.Add(new Visit { PostId = postId, CreatedOn = DateTime.Now });
             var post = _postRepository.Get(postId);
             return new PostCommentModel
             {

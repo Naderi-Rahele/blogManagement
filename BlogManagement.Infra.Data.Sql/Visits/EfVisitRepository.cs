@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using BlogManagement.Core.Domain.Visits;
 using BlogManagement.Infra.Data.Sql.Common;
 
@@ -12,10 +13,10 @@ namespace BlogManagement.Infra.Data.Sql.Visits
             _blogManagementDb = blogManagementDb;
         }
 
-        public void Add(Visit visit)
+        public async Task Add(Visit visit)
         {
-            _blogManagementDb.Add(visit);
-            _blogManagementDb.SaveChanges();
+           await _blogManagementDb.AddAsync(visit);
+           await _blogManagementDb.SaveChangesAsync();
         }
     }
 }
