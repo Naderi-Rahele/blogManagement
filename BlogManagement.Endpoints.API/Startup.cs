@@ -1,7 +1,16 @@
 using BlogManagement.Core.ApplicationServices.Blogs;
+using BlogManagement.Core.ApplicationServices.Comments;
+using BlogManagement.Core.ApplicationServices.Posts;
+using BlogManagement.Core.ApplicationServices.Visits;
 using BlogManagement.Core.Domain.Blogs;
+using BlogManagement.Core.Domain.Comments;
+using BlogManagement.Core.Domain.Posts;
+using BlogManagement.Core.Domain.Visits;
+using BlogManagement.Endpoints.API.Controllers.Filters;
 using BlogManagement.Infra.Data.Sql.Blogs;
+using BlogManagement.Infra.Data.Sql.Comments;
 using BlogManagement.Infra.Data.Sql.Common;
+using BlogManagement.Infra.Data.Sql.Posts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,8 +40,9 @@ namespace BlogManagement.Endpoints.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddControllers();
+             services.AddControllers(f=> {
+                f.Filters.Add(typeof(InputFilter));
+            });
 
             services.AddSwaggerGen(c =>
             {
@@ -42,6 +52,12 @@ namespace BlogManagement.Endpoints.API
             services.AddDbContext<BlogManagementDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BlogManagementCnn")));
             services.AddScoped<BlogRepository, EfBlogRepository>();
             services.AddScoped<BlogApplicaitonService>();
+            services.AddScoped<PostRepository, EfPostRepository>();
+            services.AddScoped<PostApplicationService>();
+            services.AddScoped<CommentRepository, EfCommentRepository>();
+            services.AddScoped<CommentApplicationService>();
+            services.AddScoped<VisitRepository, Infra.Data.Sql.Visits.EfVisitRepository>();
+            services.AddScoped<VisitApplicationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
