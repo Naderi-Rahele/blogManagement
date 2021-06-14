@@ -3,9 +3,13 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace BlogManagement.Endpoints.API.Controllers.Filters
 {
-    public class InputFilter: ActionFilterAttribute
+    public class InputFilter: IActionFilter
     {
-        public override void OnActionExecuting(ActionExecutingContext context)
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
+        }
+
+        public  void OnActionExecuting(ActionExecutingContext context)
         {
            var stringArgs = context.ActionArguments.Where(pair => pair.Value is string).ToList();
 

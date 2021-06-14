@@ -40,8 +40,10 @@ namespace BlogManagement.Endpoints.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-             services.AddControllers(f=> {
+            services.AddControllers(f =>
+            {
                 f.Filters.Add(typeof(InputFilter));
+                f.Filters.Add(typeof(ExceptionFilter));
             });
 
             services.AddSwaggerGen(c =>
@@ -61,7 +63,7 @@ namespace BlogManagement.Endpoints.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             if (env.IsDevelopment())
             {
@@ -75,6 +77,12 @@ namespace BlogManagement.Endpoints.API
             app.UseRouting();
 
             app.UseAuthorization();
+            app.Use(async (context, next) =>
+            {
+                logger.LogInformation($"ip:{context.Connection.RemoteIpAddress},date:{DateTime.Now},request:{context.Request.Path}");
+                await next.Invoke();
+                logger.LogInformation($"result:{context.Response.StatusCode}");
+            });
 
             app.UseEndpoints(endpoints =>
             {
