@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlogManagement.Infra.Data.Sql.Posts
 {
-    public class EfPostRepository: PostRepository
+    public class EfPostRepository : PostRepository
     {
         private readonly BlogManagementDbContext _blogManagementDb;
 
@@ -20,7 +20,7 @@ namespace BlogManagement.Infra.Data.Sql.Posts
             _blogManagementDb.SaveChanges();
         }
 
-       public Post Get(int postId)
+        public Post Get(int postId)
         {
             return _blogManagementDb.Posts.Include(x => x.Comments).Include(x => x.Visits).FirstOrDefault(c => c.Id == postId);
         }
@@ -35,14 +35,11 @@ namespace BlogManagement.Infra.Data.Sql.Posts
             _blogManagementDb.SaveChanges();
         }
 
-        Post PostRepository.Get(int blogId)
+        public ICollection<Post> Get()
         {
-            throw new System.NotImplementedException();
+            return _blogManagementDb.Posts.ToList();
         }
 
-        ICollection<Post> PostRepository.Get()
-        {
-            throw new System.NotImplementedException();
-        }
+
     }
 }
